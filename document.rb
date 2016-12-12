@@ -19,7 +19,7 @@ class Document
 
     # ファイル名からの情報抽出
     # 学籍番号
-    @student_num = file.match(/\d{2}[t|g]\d{3}/i).to_s.strip
+    @student_num = file.match(/\d{2}(T|G|t|g)\d{3}/i).to_s.strip
 
     # ナンバリング(n月版かを6桁の数字で)
     @doc_num = file.match(/\d{6}/).to_s.strip
@@ -28,7 +28,7 @@ class Document
     arr.each do |text_block|
       # 情報のマッチング
       # 学籍番号を抽出
-      @student_num = text_block.match(/\d{2}[t|g]\d{3}\t/i).to_s.strip unless @student_num.strip == ''
+      @student_num = text_block.match(/\d{2}(T|G|t|g)\d{3}\t/).to_s.strip unless @student_num.strip == ''
 
       # ナンバリング
       @doc_num = text_block.match(/\d{4}年\d{2}月版/).to_s.delete('年').delete('月版').strip unless @doc_num.strip == ''
