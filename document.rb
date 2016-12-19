@@ -40,8 +40,9 @@ class Document
       # カテゴリ
       @category = text_block.match(/自己紹介|授業発表|制作実習|体験総括|先行研究|企業研修|技術検討|学会発表|作業実践|就職活動|中間発表|文献調査|卒論審査|学生総括/).to_s.strip if @category.strip == ''
 
-      # ファイルの更新日
     end
+
+    @student_num = 's' + @student_num.to_s if @student_num.strip != ''
   end
 
   # pptxファイルを解凍して、一枚目のスライドの内容を抽出
@@ -65,7 +66,8 @@ class Document
     end
 
     # スライド解凍時に生成されたものを削除
-    %x(rm -rf _rels ppt #{file})
+    FileUtils.rm(file)
+    FileUtils.rm_r("./ppt")
 
     return text.delete('\"').delete('[').delete(']')
   end
