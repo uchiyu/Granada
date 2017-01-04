@@ -3,7 +3,12 @@ require 'sinatra/reloader' if development?
 require 'json'
 require './document'
 
-set :bind, '133.92.165.48'
+set :bind, '0.0.0.0'
+
+File.open("directory.json") do |file|
+  hash = JSON.load(file)
+  $DIRECTORY = hash['directory']
+end
 
 get '/documents' do
   unless params[:from] == nil
@@ -32,7 +37,7 @@ end
 # filesには各ファイル名、directoriesには各ディレクトリ名を格納
 def find_file( directories, files, from )
   # 再帰的にディレクトリを調査
-  Dir.glob('./../Labo/**/*').each do |path|
+  Dir.glob($DIRECTORY).each do |path|
     if /^(?!(.*)\/s\d{2}(T|G|t|g)\d{3}\/\d{6}\/(.*)\/(.*)).*.pptx/ =~ path # /年月/*.pptx の場合のみ
       file = path.to_s.slice!(/[^\/]*$/) # ファイル名の抽出
       directory = path.delete(path.to_s.slice!(/[^\/]*$/)) # ディレクトリ名の抽出
